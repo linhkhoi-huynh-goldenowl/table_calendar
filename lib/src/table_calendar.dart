@@ -3,7 +3,7 @@
 
 import 'dart:math';
 
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
@@ -222,6 +222,9 @@ class TableCalendar<T> extends StatefulWidget {
   /// Used for style weekend first header.
   final Decoration weekdayHeadDecoration;
 
+  /// Used for set material color week header.
+  final Color? backgroundHeadColor;
+
   /// Creates a `TableCalendar` widget.
   TableCalendar(
       {Key? key,
@@ -283,7 +286,8 @@ class TableCalendar<T> extends StatefulWidget {
       this.weekdayFirstHeadDecoration = const BoxDecoration(),
       this.weekendEndHeadDecoration = const BoxDecoration(),
       this.weekdayEndHeadDecoration = const BoxDecoration(),
-      this.weekdayHeadDecoration = const BoxDecoration()})
+      this.weekdayHeadDecoration = const BoxDecoration(),
+      this.backgroundHeadColor})
       : assert(availableCalendarFormats.keys.contains(calendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
         assert(weekendDays.isNotEmpty
@@ -565,20 +569,38 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
 
                 final isWeekend =
                     _isWeekend(day, weekendDays: widget.weekendDays);
-
-                dowCell = Container(
-                  decoration: _getDecorationWeek(day),
-                  child: Center(
-                    child: ExcludeSemantics(
-                      child: Text(
-                        weekdayString,
-                        style: isWeekend
-                            ? widget.daysOfWeekStyle.weekendStyle
-                            : widget.daysOfWeekStyle.weekdayStyle,
+                if (widget.backgroundHeadColor != null) {
+                  dowCell = Material(
+                    color: widget.backgroundHeadColor!,
+                    child: Container(
+                      decoration: _getDecorationWeek(day),
+                      child: Center(
+                        child: ExcludeSemantics(
+                          child: Text(
+                            weekdayString,
+                            style: isWeekend
+                                ? widget.daysOfWeekStyle.weekendStyle
+                                : widget.daysOfWeekStyle.weekdayStyle,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                );
+                  );
+                } else {
+                  dowCell = Container(
+                    decoration: _getDecorationWeek(day),
+                    child: Center(
+                      child: ExcludeSemantics(
+                        child: Text(
+                          weekdayString,
+                          style: isWeekend
+                              ? widget.daysOfWeekStyle.weekendStyle
+                              : widget.daysOfWeekStyle.weekdayStyle,
+                        ),
+                      ),
+                    ),
+                  );
+                }
               }
 
               return dowCell;

@@ -207,6 +207,21 @@ class TableCalendar<T> extends StatefulWidget {
   /// Called when the LeftChevron to right.
   final bool isLeftChevronToRight;
 
+  /// Used for style weekend end header.
+  final Decoration weekendEndHeadDecoration;
+
+  /// Used for style weekend first header.
+  final Decoration weekendFirstHeadDecoration;
+
+  /// Used for style weekday end header.
+  final Decoration weekdayEndHeadDecoration;
+
+  /// Used for style weekend first header.
+  final Decoration weekdayFirstHeadDecoration;
+
+  /// Used for style weekend first header.
+  final Decoration weekdayHeadDecoration;
+
   /// Creates a `TableCalendar` widget.
   TableCalendar(
       {Key? key,
@@ -263,7 +278,12 @@ class TableCalendar<T> extends StatefulWidget {
       this.onPageChanged,
       this.onFormatChanged,
       this.onCalendarCreated,
-      this.isLeftChevronToRight = false})
+      this.isLeftChevronToRight = false,
+      this.weekendFirstHeadDecoration = const BoxDecoration(),
+      this.weekdayFirstHeadDecoration = const BoxDecoration(),
+      this.weekendEndHeadDecoration = const BoxDecoration(),
+      this.weekdayEndHeadDecoration = const BoxDecoration(),
+      this.weekdayHeadDecoration = const BoxDecoration()})
       : assert(availableCalendarFormats.keys.contains(calendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
         assert(weekendDays.isNotEmpty
@@ -546,13 +566,16 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                 final isWeekend =
                     _isWeekend(day, weekendDays: widget.weekendDays);
 
-                dowCell = Center(
-                  child: ExcludeSemantics(
-                    child: Text(
-                      weekdayString,
-                      style: isWeekend
-                          ? widget.daysOfWeekStyle.weekendStyle
-                          : widget.daysOfWeekStyle.weekdayStyle,
+                dowCell = Container(
+                  decoration: _getDecorationWeek(day),
+                  child: Center(
+                    child: ExcludeSemantics(
+                      child: Text(
+                        weekdayString,
+                        style: isWeekend
+                            ? widget.daysOfWeekStyle.weekendStyle
+                            : widget.daysOfWeekStyle.weekdayStyle,
+                      ),
                     ),
                   ),
                 );
@@ -781,5 +804,20 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
     List<int> weekendDays = const [DateTime.saturday, DateTime.sunday],
   }) {
     return weekendDays.contains(day.weekday);
+  }
+
+  Decoration _getDecorationWeek(DateTime day) {
+    switch (day.weekday) {
+      case DateTime.monday:
+        return widget.weekdayFirstHeadDecoration;
+      case DateTime.friday:
+        return widget.weekdayEndHeadDecoration;
+      case DateTime.saturday:
+        return widget.weekendFirstHeadDecoration;
+      case DateTime.sunday:
+        return widget.weekendEndHeadDecoration;
+      default:
+        return widget.weekdayHeadDecoration;
+    }
   }
 }

@@ -475,7 +475,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    final child = Column(
       children: [
         if (widget.headerVisible)
           ValueListenableBuilder<DateTime>(
@@ -617,6 +617,14 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
         ),
       ],
     );
+    if (widget.backgroundHeadColor != null) {
+      return Material(
+        color: widget.backgroundHeadColor,
+        child: child,
+      );
+    } else {
+      return child;
+    }
   }
 
   Widget _buildCell(DateTime day, DateTime focusedDay) {

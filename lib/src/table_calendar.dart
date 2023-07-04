@@ -230,6 +230,9 @@ class TableCalendar<T> extends StatefulWidget {
   /// Used for custom shadow.
   final List<BoxShadow>? customShadow;
 
+  /// Used for radius.
+  final double radius;
+
   /// Creates a `TableCalendar` widget.
   TableCalendar(
       {Key? key,
@@ -292,7 +295,9 @@ class TableCalendar<T> extends StatefulWidget {
       this.weekendEndHeadDecoration = const BoxDecoration(),
       this.weekdayEndHeadDecoration = const BoxDecoration(),
       this.weekdayHeadDecoration = const BoxDecoration(),
-      this.backgroundHeadColor,this.customShadow,})
+      this.backgroundHeadColor,
+      this.customShadow,
+      this.radius=0})
       : assert(availableCalendarFormats.keys.contains(calendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
         assert(weekendDays.isNotEmpty
@@ -625,8 +630,9 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
     if (widget.backgroundHeadColor != null||widget.customShadow!=null) {
       return Container(
         decoration: BoxDecoration(
-           color: widget.backgroundHeadColor,
-            boxShadow: widget.customShadow
+          borderRadius: BorderRadius.circular(widget.radius),
+          color: widget.backgroundHeadColor,
+          boxShadow: widget.customShadow
         ),
         child: child,
       );

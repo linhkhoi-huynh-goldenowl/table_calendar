@@ -3,7 +3,8 @@
 
 import 'dart:math';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
+import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart';
 import 'package:intl/intl.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
@@ -15,6 +16,7 @@ import 'shared/utils.dart';
 import 'table_calendar_base.dart';
 import 'widgets/calendar_header.dart';
 import 'widgets/cell_content.dart';
+
 
 /// Signature for `onDaySelected` callback. Contains the selected day and focused day.
 typedef OnDaySelected = void Function(
@@ -225,6 +227,9 @@ class TableCalendar<T> extends StatefulWidget {
   /// Used for set material color week header.
   final Color? backgroundHeadColor;
 
+  /// Used for custom shadow.
+  final List<BoxShadow>? customShadow;
+
   /// Creates a `TableCalendar` widget.
   TableCalendar(
       {Key? key,
@@ -287,7 +292,7 @@ class TableCalendar<T> extends StatefulWidget {
       this.weekendEndHeadDecoration = const BoxDecoration(),
       this.weekdayEndHeadDecoration = const BoxDecoration(),
       this.weekdayHeadDecoration = const BoxDecoration(),
-      this.backgroundHeadColor})
+      this.backgroundHeadColor,this.customShadow,})
       : assert(availableCalendarFormats.keys.contains(calendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
         assert(weekendDays.isNotEmpty
@@ -617,9 +622,12 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
         ),
       ],
     );
-    if (widget.backgroundHeadColor != null) {
-      return Material(
-        color: widget.backgroundHeadColor,
+    if (widget.backgroundHeadColor != null||widget.customShadow!=null) {
+      return Container(
+        decoration: BoxDecoration(
+           color: widget.backgroundHeadColor,
+            boxShadow: widget.customShadow
+        ),
         child: child,
       );
     } else {

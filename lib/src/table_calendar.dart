@@ -227,6 +227,9 @@ class TableCalendar<T> extends StatefulWidget {
   /// Used for set material color week header.
   final Color? backgroundHeadColor;
 
+  /// Used for set material color background.
+  final Color? backgroundColor;
+
   /// Used for custom shadow.
   final List<BoxShadow>? customShadow;
 
@@ -297,7 +300,8 @@ class TableCalendar<T> extends StatefulWidget {
       this.weekdayHeadDecoration = const BoxDecoration(),
       this.backgroundHeadColor,
       this.customShadow,
-      this.radius=0})
+      this.radius=0,
+      this.backgroundColor})
       : assert(availableCalendarFormats.keys.contains(calendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
         assert(weekendDays.isNotEmpty
@@ -581,7 +585,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                     _isWeekend(day, weekendDays: widget.weekendDays);
                 if (widget.backgroundHeadColor != null) {
                   dowCell = Material(
-                    color: Colors.red,
+                    color: widget.backgroundHeadColor,
                     child: Container(
                       decoration: _getDecorationWeek(day),
                       child: Center(
@@ -627,11 +631,11 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
         ),
       ],
     );
-    if (widget.backgroundHeadColor != null||widget.customShadow!=null) {
+    if (widget.backgroundColor != null||widget.customShadow!=null) {
       return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(widget.radius),
-          color: widget.backgroundHeadColor,
+          color: widget.backgroundColor,
           boxShadow: widget.customShadow
         ),
         child: child,

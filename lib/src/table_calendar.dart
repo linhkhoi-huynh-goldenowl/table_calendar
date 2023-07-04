@@ -576,7 +576,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                     _isWeekend(day, weekendDays: widget.weekendDays);
                 if (widget.backgroundHeadColor != null) {
                   dowCell = Material(
-                    color: widget.backgroundHeadColor!,
+                    color: Colors.transparent,
                     child: Container(
                       decoration: _getDecorationWeek(day),
                       child: Center(

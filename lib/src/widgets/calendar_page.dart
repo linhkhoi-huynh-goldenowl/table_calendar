@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
-import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart';
 
 class CalendarPage extends StatelessWidget {
   final Widget Function(BuildContext context, DateTime day)? dowBuilder;
@@ -43,23 +42,12 @@ class CalendarPage extends StatelessWidget {
         children: [
           if (weekNumberVisible) _buildWeekNumbers(context),
           Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                boxShadow: [
-                   BoxShadow(
-            inset: true,
-            offset: const Offset(0, 0),
-            blurRadius: 4,
-            color:Colors.red)
-                ]
-              ),
-              child: Table(
-                border: tableBorder,
-                children: [
-                  if (dowVisible) _buildDaysOfWeek(context),
-                  ..._buildCalendarDays(context),
-                ],
-              ),
+            child: Table(
+              border: tableBorder,
+              children: [
+                if (dowVisible) _buildDaysOfWeek(context),
+                ..._buildCalendarDays(context),
+              ],
             ),
           ),
         ],

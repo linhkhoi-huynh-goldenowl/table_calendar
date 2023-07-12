@@ -236,6 +236,9 @@ class TableCalendar<T> extends StatefulWidget {
   /// Used for radius.
   final double radius;
 
+  /// Used for radius.
+  final bool hasInnerShadow;
+
   /// Creates a `TableCalendar` widget.
   TableCalendar(
       {Key? key,
@@ -301,7 +304,9 @@ class TableCalendar<T> extends StatefulWidget {
       this.backgroundHeadColor,
       this.customShadow,
       this.radius=0,
-      this.backgroundColor})
+      this.backgroundColor,
+      this.hasInnerShadow=false
+      })
       : assert(availableCalendarFormats.keys.contains(calendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
         assert(weekendDays.isNotEmpty
@@ -585,9 +590,9 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                     _isWeekend(day, weekendDays: widget.weekendDays);
                 if (widget.backgroundHeadColor != null) {
                   dowCell = Material(
-                    color: widget.backgroundHeadColor,
+                    color: widget.hasInnerShadow?Colors.transparent:widget.backgroundHeadColor,
                     child: Container(
-                      decoration: _getDecorationWeek(day),
+                      decoration:widget.hasInnerShadow?null: _getDecorationWeek(day),
                       child: Center(
                         child: ExcludeSemantics(
                           child: Text(
@@ -631,7 +636,26 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
         ),
       ],
     );
-    if (widget.backgroundColor != null||widget.customShadow!=null) {
+    if(widget.hasInnerShadow){
+if (widget.backgroundColor != null||widget.customShadow!=null) {
+      return Stack(
+        children: [
+          Positioned.fill(child: _buildShadow()),
+          Positioned.fill(child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(widget.radius),
+              color: Colors.transparent,
+              boxShadow: widget.customShadow
+            ),
+          )),
+          child
+        ],
+      );
+    } else {
+      return child;
+    }
+    }else{
+       if (widget.backgroundColor != null||widget.customShadow!=null) {
       return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(widget.radius),
@@ -643,6 +667,77 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
     } else {
       return child;
     }
+    }
+    
+  }
+
+
+  Widget _buildShadow(){
+    return Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(widget.radius),
+              color: widget.backgroundColor,
+             
+            ),
+      child: Column(
+        children: [
+          if (widget.headerVisible)
+            Stack(
+              children: [
+                CalendarHeader(
+                      isLeftChevronToRight: widget.isLeftChevronToRight,
+                      headerTitleBuilder: widget.calendarBuilders.headerTitleBuilder,
+                      focusedMonth: DateTime.now(),
+                      onLeftChevronTap: _onLeftChevronTap,
+                      onRightChevronTap: _onRightChevronTap,
+                      onHeaderTap: () {},
+                      onHeaderLongPress: (){},
+                      headerStyle: widget.headerStyle,
+                      availableCalendarFormats: widget.availableCalendarFormats,
+                      calendarFormat: widget.calendarFormat,
+                      locale: widget.locale,
+                      onFormatButtonTap: (format) {
+                        assert(
+                          widget.onFormatChanged != null,
+                          'Using `FormatButton` without providing `onFormatChanged` will have no effect.',
+                        );
+    
+                        widget.onFormatChanged?.call(format);
+                      },
+                    ),
+                Positioned.fill(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: widget.backgroundHeadColor,
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(widget.radius))
+                    ),
+                  ),
+                )
+              ],
+            ),
+         Container(
+          color: widget.backgroundHeadColor,
+           child: Row(children: List.generate(7, (index) => Expanded(
+             child: Container(
+              padding: EdgeInsets.symmetric(vertical: 4),
+              
+                                decoration: _getDecorationWeekByIndex(index+1),
+                                child: Center(
+                                  child: ExcludeSemantics(
+                                    child: Text(
+                                      '',
+                                      style: index+1>5
+                                          ? widget.daysOfWeekStyle.weekendStyle
+                                          : widget.daysOfWeekStyle.weekdayStyle,
+                                    ),
+                                  ),
+                                ),
+                              ),
+           ),),),
+         )
+        ],
+      ),
+    );
   }
 
   Widget _buildCell(DateTime day, DateTime focusedDay) {
@@ -856,6 +951,21 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
 
   Decoration _getDecorationWeek(DateTime day) {
     switch (day.weekday) {
+      case DateTime.monday:
+        return widget.weekdayFirstHeadDecoration;
+      case DateTime.friday:
+        return widget.weekdayEndHeadDecoration;
+      case DateTime.saturday:
+        return widget.weekendFirstHeadDecoration;
+      case DateTime.sunday:
+        return widget.weekendEndHeadDecoration;
+      default:
+        return widget.weekdayHeadDecoration;
+    }
+  }
+  Decoration _getDecorationWeekByIndex(int index) {
+ 
+    switch (index) {
       case DateTime.monday:
         return widget.weekdayFirstHeadDecoration;
       case DateTime.friday:

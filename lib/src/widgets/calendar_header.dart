@@ -22,6 +22,7 @@ class CalendarHeader extends StatelessWidget {
   final Map<CalendarFormat, String> availableCalendarFormats;
   final DayBuilder? headerTitleBuilder;
   final bool isLeftChevronToRight;
+  final CrossAxisAlignment crossAxisAlignment;
 
   const CalendarHeader(
       {Key? key,
@@ -36,7 +37,8 @@ class CalendarHeader extends StatelessWidget {
       required this.onFormatButtonTap,
       required this.availableCalendarFormats,
       this.headerTitleBuilder,
-      this.isLeftChevronToRight = false})
+      this.isLeftChevronToRight = false,
+      this.crossAxisAlignment = CrossAxisAlignment.start})
       : super(key: key);
 
   @override
@@ -49,6 +51,7 @@ class CalendarHeader extends StatelessWidget {
       margin: headerStyle.headerMargin,
       padding: headerStyle.headerPadding,
       child: Row(
+        crossAxisAlignment: crossAxisAlignment,
         mainAxisSize: MainAxisSize.max,
         children: [
           if (headerStyle.leftChevronVisible && !isLeftChevronToRight)

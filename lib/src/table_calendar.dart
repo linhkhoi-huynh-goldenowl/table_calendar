@@ -17,7 +17,6 @@ import 'table_calendar_base.dart';
 import 'widgets/calendar_header.dart';
 import 'widgets/cell_content.dart';
 
-
 /// Signature for `onDaySelected` callback. Contains the selected day and focused day.
 typedef OnDaySelected = void Function(
     DateTime selectedDay, DateTime focusedDay);
@@ -239,75 +238,82 @@ class TableCalendar<T> extends StatefulWidget {
   /// Used for radius.
   final bool hasInnerShadow;
 
+  /// cross align header
+  final CrossAxisAlignment crossAxisAlignment;
+
+  /// cross align header
+  final Widget? divider;
+
   /// Creates a `TableCalendar` widget.
-  TableCalendar(
-      {Key? key,
-      required DateTime focusedDay,
-      required DateTime firstDay,
-      required DateTime lastDay,
-      DateTime? currentDay,
-      this.locale,
-      this.rangeStartDay,
-      this.rangeEndDay,
-      this.weekendDays = const [DateTime.saturday, DateTime.sunday],
-      this.calendarFormat = CalendarFormat.month,
-      this.availableCalendarFormats = const {
-        CalendarFormat.month: 'Month',
-        CalendarFormat.twoWeeks: '2 weeks',
-        CalendarFormat.week: 'Week',
-      },
-      this.headerVisible = true,
-      this.daysOfWeekVisible = true,
-      this.pageJumpingEnabled = false,
-      this.pageAnimationEnabled = true,
-      this.sixWeekMonthsEnforced = false,
-      this.shouldFillViewport = false,
-      this.weekNumbersVisible = false,
-      this.rowHeight = 52.0,
-      this.daysOfWeekHeight = 16.0,
-      this.formatAnimationDuration = const Duration(milliseconds: 200),
-      this.formatAnimationCurve = Curves.linear,
-      this.pageAnimationDuration = const Duration(milliseconds: 300),
-      this.pageAnimationCurve = Curves.easeOut,
-      this.startingDayOfWeek = StartingDayOfWeek.sunday,
-      this.dayHitTestBehavior = HitTestBehavior.opaque,
-      this.availableGestures = AvailableGestures.all,
-      this.simpleSwipeConfig = const SimpleSwipeConfig(
-        verticalThreshold: 25.0,
-        swipeDetectionBehavior: SwipeDetectionBehavior.continuousDistinct,
-      ),
-      this.headerStyle = const HeaderStyle(),
-      this.daysOfWeekStyle = const DaysOfWeekStyle(),
-      this.calendarStyle = const CalendarStyle(),
-      this.calendarBuilders = const CalendarBuilders(),
-      this.rangeSelectionMode = RangeSelectionMode.toggledOff,
-      this.eventLoader,
-      this.enabledDayPredicate,
-      this.selectedDayPredicate,
-      this.holidayPredicate,
-      this.onRangeSelected,
-      this.onDaySelected,
-      this.onDayLongPressed,
-      this.onDisabledDayTapped,
-      this.onDisabledDayLongPressed,
-      this.onHeaderTapped,
-      this.onHeaderLongPressed,
-      this.onPageChanged,
-      this.onFormatChanged,
-      this.onCalendarCreated,
-      this.isLeftChevronToRight = false,
-      this.weekendFirstHeadDecoration = const BoxDecoration(),
-      this.weekdayFirstHeadDecoration = const BoxDecoration(),
-      this.weekendEndHeadDecoration = const BoxDecoration(),
-      this.weekdayEndHeadDecoration = const BoxDecoration(),
-      this.weekdayHeadDecoration = const BoxDecoration(),
-      this.backgroundHeadColor,
-      this.customShadow,
-      this.radius=0,
-      this.backgroundColor,
-      this.hasInnerShadow=false
-      })
-      : assert(availableCalendarFormats.keys.contains(calendarFormat)),
+  TableCalendar({
+    Key? key,
+    required DateTime focusedDay,
+    required DateTime firstDay,
+    required DateTime lastDay,
+    DateTime? currentDay,
+    this.locale,
+    this.rangeStartDay,
+    this.rangeEndDay,
+    this.weekendDays = const [DateTime.saturday, DateTime.sunday],
+    this.calendarFormat = CalendarFormat.month,
+    this.availableCalendarFormats = const {
+      CalendarFormat.month: 'Month',
+      CalendarFormat.twoWeeks: '2 weeks',
+      CalendarFormat.week: 'Week',
+    },
+    this.headerVisible = true,
+    this.daysOfWeekVisible = true,
+    this.pageJumpingEnabled = false,
+    this.pageAnimationEnabled = true,
+    this.sixWeekMonthsEnforced = false,
+    this.shouldFillViewport = false,
+    this.weekNumbersVisible = false,
+    this.rowHeight = 52.0,
+    this.daysOfWeekHeight = 16.0,
+    this.formatAnimationDuration = const Duration(milliseconds: 200),
+    this.formatAnimationCurve = Curves.linear,
+    this.pageAnimationDuration = const Duration(milliseconds: 300),
+    this.pageAnimationCurve = Curves.easeOut,
+    this.startingDayOfWeek = StartingDayOfWeek.sunday,
+    this.dayHitTestBehavior = HitTestBehavior.opaque,
+    this.availableGestures = AvailableGestures.all,
+    this.simpleSwipeConfig = const SimpleSwipeConfig(
+      verticalThreshold: 25.0,
+      swipeDetectionBehavior: SwipeDetectionBehavior.continuousDistinct,
+    ),
+    this.headerStyle = const HeaderStyle(),
+    this.daysOfWeekStyle = const DaysOfWeekStyle(),
+    this.calendarStyle = const CalendarStyle(),
+    this.calendarBuilders = const CalendarBuilders(),
+    this.rangeSelectionMode = RangeSelectionMode.toggledOff,
+    this.eventLoader,
+    this.enabledDayPredicate,
+    this.selectedDayPredicate,
+    this.holidayPredicate,
+    this.onRangeSelected,
+    this.onDaySelected,
+    this.onDayLongPressed,
+    this.onDisabledDayTapped,
+    this.onDisabledDayLongPressed,
+    this.onHeaderTapped,
+    this.onHeaderLongPressed,
+    this.onPageChanged,
+    this.onFormatChanged,
+    this.onCalendarCreated,
+    this.isLeftChevronToRight = false,
+    this.weekendFirstHeadDecoration = const BoxDecoration(),
+    this.weekdayFirstHeadDecoration = const BoxDecoration(),
+    this.weekendEndHeadDecoration = const BoxDecoration(),
+    this.weekdayEndHeadDecoration = const BoxDecoration(),
+    this.weekdayHeadDecoration = const BoxDecoration(),
+    this.backgroundHeadColor,
+    this.customShadow,
+    this.radius = 0,
+    this.backgroundColor,
+    this.hasInnerShadow = false,
+    this.crossAxisAlignment = CrossAxisAlignment.center,
+    this.divider,
+  })  : assert(availableCalendarFormats.keys.contains(calendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
         assert(weekendDays.isNotEmpty
             ? weekendDays.every(
@@ -501,6 +507,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             valueListenable: _focusedDay,
             builder: (context, value, _) {
               return CalendarHeader(
+                crossAxisAlignment: widget.crossAxisAlignment,
                 isLeftChevronToRight: widget.isLeftChevronToRight,
                 headerTitleBuilder: widget.calendarBuilders.headerTitleBuilder,
                 focusedMonth: value,
@@ -524,6 +531,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
               );
             },
           ),
+        if (widget.divider != null) widget.divider!,
         Flexible(
           flex: widget.shouldFillViewport ? 1 : 0,
           child: TableCalendarBase(
@@ -590,9 +598,13 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                     _isWeekend(day, weekendDays: widget.weekendDays);
                 if (widget.backgroundHeadColor != null) {
                   dowCell = Material(
-                    color: widget.hasInnerShadow?Colors.transparent:widget.backgroundHeadColor,
+                    color: widget.hasInnerShadow
+                        ? Colors.transparent
+                        : widget.backgroundHeadColor,
                     child: Container(
-                      decoration:widget.hasInnerShadow?null: _getDecorationWeek(day),
+                      decoration: widget.hasInnerShadow
+                          ? null
+                          : _getDecorationWeek(day),
                       child: Center(
                         child: ExcludeSemantics(
                           child: Text(
@@ -636,105 +648,106 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
         ),
       ],
     );
-    if(widget.hasInnerShadow){
-if (widget.backgroundColor != null||widget.customShadow!=null) {
-      return Stack(
-        children: [
-          Positioned.fill(child: _buildShadow()),
-          Positioned.fill(child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(widget.radius),
-              color: Colors.transparent,
-              boxShadow: widget.customShadow
-            ),
-          )),
-          child
-        ],
-      );
+    if (widget.hasInnerShadow) {
+      if (widget.backgroundColor != null || widget.customShadow != null) {
+        return Stack(
+          children: [
+            Positioned.fill(child: _buildShadow()),
+            Positioned.fill(
+                child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(widget.radius),
+                  color: Colors.transparent,
+                  boxShadow: widget.customShadow),
+            )),
+            child
+          ],
+        );
+      } else {
+        return child;
+      }
     } else {
-      return child;
-    }
-    }else{
-       if (widget.backgroundColor != null||widget.customShadow!=null) {
-      return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(widget.radius),
-          color: widget.backgroundColor,
-          boxShadow: widget.customShadow
-        ),
-        child: child,
-      );
-    } else {
-      return child;
-    }
-    }
-    
-  }
-
-
-  Widget _buildShadow(){
-    return Container(
-            decoration: BoxDecoration(
+      if (widget.backgroundColor != null || widget.customShadow != null) {
+        return Container(
+          decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(widget.radius),
               color: widget.backgroundColor,
-             
-            ),
+              boxShadow: widget.customShadow),
+          child: child,
+        );
+      } else {
+        return child;
+      }
+    }
+  }
+
+  Widget _buildShadow() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(widget.radius),
+        color: widget.backgroundColor,
+      ),
       child: Column(
         children: [
           if (widget.headerVisible)
             Stack(
               children: [
                 CalendarHeader(
-                      isLeftChevronToRight: widget.isLeftChevronToRight,
-                      headerTitleBuilder: widget.calendarBuilders.headerTitleBuilder,
-                      focusedMonth: DateTime.now(),
-                      onLeftChevronTap: _onLeftChevronTap,
-                      onRightChevronTap: _onRightChevronTap,
-                      onHeaderTap: () {},
-                      onHeaderLongPress: (){},
-                      headerStyle: widget.headerStyle,
-                      availableCalendarFormats: widget.availableCalendarFormats,
-                      calendarFormat: widget.calendarFormat,
-                      locale: widget.locale,
-                      onFormatButtonTap: (format) {
-                        assert(
-                          widget.onFormatChanged != null,
-                          'Using `FormatButton` without providing `onFormatChanged` will have no effect.',
-                        );
-    
-                        widget.onFormatChanged?.call(format);
-                      },
-                    ),
+                  isLeftChevronToRight: widget.isLeftChevronToRight,
+                  headerTitleBuilder:
+                      widget.calendarBuilders.headerTitleBuilder,
+                  focusedMonth: DateTime.now(),
+                  onLeftChevronTap: _onLeftChevronTap,
+                  onRightChevronTap: _onRightChevronTap,
+                  onHeaderTap: () {},
+                  onHeaderLongPress: () {},
+                  headerStyle: widget.headerStyle,
+                  availableCalendarFormats: widget.availableCalendarFormats,
+                  calendarFormat: widget.calendarFormat,
+                  locale: widget.locale,
+                  onFormatButtonTap: (format) {
+                    assert(
+                      widget.onFormatChanged != null,
+                      'Using `FormatButton` without providing `onFormatChanged` will have no effect.',
+                    );
+
+                    widget.onFormatChanged?.call(format);
+                  },
+                ),
                 Positioned.fill(
                   child: Container(
                     decoration: BoxDecoration(
-                      color: widget.backgroundHeadColor,
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(widget.radius))
-                    ),
+                        color: widget.backgroundHeadColor,
+                        borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(widget.radius))),
                   ),
                 )
               ],
             ),
-         Container(
-          color: widget.backgroundHeadColor,
-           child: Row(children: List.generate(7, (index) => Expanded(
-             child: Container(
-              padding: EdgeInsets.symmetric(vertical: 4),
-              
-                                decoration: _getDecorationWeekByIndex(index+1),
-                                child: Center(
-                                  child: ExcludeSemantics(
-                                    child: Text(
-                                      '',
-                                      style: index+1>5
-                                          ? widget.daysOfWeekStyle.weekendStyle
-                                          : widget.daysOfWeekStyle.weekdayStyle,
-                                    ),
-                                  ),
-                                ),
-                              ),
-           ),),),
-         )
+          Container(
+            color: widget.backgroundHeadColor,
+            child: Row(
+              children: List.generate(
+                7,
+                (index) => Expanded(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 4),
+                    decoration: _getDecorationWeekByIndex(index + 1),
+                    child: Center(
+                      child: ExcludeSemantics(
+                        child: Text(
+                          '',
+                          style: index + 1 > 5
+                              ? widget.daysOfWeekStyle.weekendStyle
+                              : widget.daysOfWeekStyle.weekdayStyle,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );
@@ -963,8 +976,8 @@ if (widget.backgroundColor != null||widget.customShadow!=null) {
         return widget.weekdayHeadDecoration;
     }
   }
+
   Decoration _getDecorationWeekByIndex(int index) {
- 
     switch (index) {
       case DateTime.monday:
         return widget.weekdayFirstHeadDecoration;
